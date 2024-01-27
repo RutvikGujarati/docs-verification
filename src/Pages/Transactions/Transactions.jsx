@@ -1,77 +1,85 @@
-// import { Transaction } from '@thirdweb-dev/sdk/dist/declarations/src/evm/core/classes/transactions';
-import React, { useEffect, useState } from 'react';
-import Web3 from 'web3';
+import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import {
+  Container,
+  Row,
+  Col,
+  ListGroup,
+  Button,
+  Spinner,
+  Alert,
+} from "react-bootstrap";
+import { Account, Web3Button, useContract } from "@thirdweb-dev/react";
+import abi from "../Document/abi.json";
+import Web3 from "web3";
 
-function Transaction() {
+const Transactions = ({ account }) => {
+  const [verifiedDocuments, setVerifiedDocuments] = useState([]);
   const [web3, setWeb3] = useState(null);
-  const [accountAddress, setAccountAddress] = useState('0x14093F94E3D9E59D1519A9ca6aA207f88005918c'); // Replace with the desired Ethereum address
-  const [transactions, setTransactions] = useState([]);
+  const [contract, setContract] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function connectToWeb3() {
-      if (window.ethereum) {
-        const web3Instance = new Web3(window.ethereum);
-        try {
+    const init = async () => {
+      try {
+        if (window.ethereum) {
+          const web3Instance = new Web3(window.ethereum);
           await window.ethereum.enable();
           setWeb3(web3Instance);
-        } catch (error) {
-          console.error(error);
+
+          const contractAddress = "0x8e1f81cFC04DDFd842Db7469f873b0ee5ef6fF8D";
+          const contractInstance = new web3Instance.eth.Contract(
+            abi,
+            contractAddress
+          );
+          setContract(contractInstance);
+        } else {
+          console.error("Web3 provider not detected");
         }
+      } catch (error) {
+        console.error("Error initializing:", error);
       }
-    }
-    connectToWeb3();
+    };
+
+    init();
   }, []);
 
-  async function fetchTransactionHistory() {
-    if (!web3) return;
-
+  const getVerifiedDocuments = async () => {
     try {
-      const blockNumber = await web3.eth.getBlockNumber();
-      const history = [];
-
-      for (let i = 0; i <= blockNumber; i++) {
-        const block = await web3.eth.getBlock(i, true);
-
-        if (block && block.transactions) {
-          const relevantTransactions = block.transactions.filter(
-            (tx) =>
-              tx.from.toLowerCase() === accountAddress.toLowerCase() ||
-              tx.to.toLowerCase() === accountAddress.toLowerCase()
-          );
-
-          history.push(...relevantTransactions);
-        }
-      }
-
-      setTransactions(history);
+      // Call the verifiedDocs function from the smart contract
+      const verifiedDocs = await contract.methods
+        .verifiedDocs()
+        .call({ from: account });
+      setVerifiedDocuments(verifiedDocs);
+      console.log("Verified Documents:", verifiedDocs);
     } catch (error) {
-      console.error(error);
+      console.error("Error getting verified documents:", error);
     }
-  }
-
-  useEffect(() => {
-    fetchTransactionHistory();
-  }, [web3, accountAddress]);
-
+  };
   return (
-    <div className="App">
-      <h1>Ethereum Transaction History</h1>
-      <p>Account Address: {accountAddress}</p>
-      <ul>
-        {transactions.map((tx, index) => (
-          <li key={index}>
-            <strong>Transaction Hash:</strong> {tx.hash}
-            <br /> 
-            <strong>From:</strong> {tx.from}
-            <br />
-            <strong>To:</strong> {tx.to}
-            <br />
-            <strong>Value:</strong> {web3.utils.fromWei(tx.value, 'ether')} Ether
-          </li>
-        ))}
-      </ul>
+    <div>
+      <Container>
+        <Col>
+          <Row>
+          <div className="mt-4">
+            <Button variant="info" onClick={getVerifiedDocuments}>
+              Get Verified Documents
+            </Button>
+          </div>
+            <ListGroup className="mt-4">
+              <ListGroup.Item>
+                <strong>Verified Documents:</strong>
+              </ListGroup.Item>
+              {verifiedDocuments.map((hash, index) => (
+                <ListGroup.Item key={index}>{hash}</ListGroup.Item>
+              ))}
+            </ListGroup>
+          </Row>
+        </Col>
+      </Container>
     </div>
   );
-}
+};
 
-export default Transaction;
+export default Transactions;

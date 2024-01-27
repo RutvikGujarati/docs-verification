@@ -42,15 +42,6 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div className="Issued-document">
-            <Link to="/feeds">
-              <i>
-                <FontAwesomeIcon icon={faAward} />
-              </i>
-              Feeds
-            </Link>
-          </div>
-
           <div className="Get-document">
             <Link to="/getdocument">
               <i>
@@ -59,12 +50,20 @@ const Navbar = () => {
               Upload Document
             </Link>
           </div>
+          <div className="Issued-document">
+            <Link to="/feeds">
+              <i>
+                <FontAwesomeIcon icon={faAward} />
+              </i>
+              My Documents
+            </Link>
+          </div>
           <div className="Help">
             <Link to="/help">
               <i>
                 <FontAwesomeIcon icon={faLightbulb} />
               </i>
-              Transactions
+              Verified Docs
             </Link>
           </div>
           <div className="About">

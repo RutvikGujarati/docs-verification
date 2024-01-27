@@ -212,9 +212,9 @@
 						"type": "bool"
 					}
 				],
-				"internalType": "struct UserDocumentUpload.Document[]",
+				"internalType": "struct UserDocumentUpload.Document",
 				"name": "",
-				"type": "tuple[]"
+				"type": "tuple"
 			}
 		],
 		"stateMutability": "view",

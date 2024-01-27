@@ -7,11 +7,11 @@ import Navbar from "./Navbar/Navbar";
 import Home from "./Pages/Home/Home";
 import About from "./Pages/About/About";
 import Vault from "./Pages/vault/Vault";
-import Document from "./Pages/Document/Document";
+import MyDocument from "./Pages/Document/Document";
 import Web3Button from "./web3button";
 import Transactions from "./Pages/Transactions/Transactions";
-import IPFSComponent from "./Pages/Document/ipfs";
-import Web3Component from "./Pages/Document/web3";
+import AdminPanel from "./Pages/Admin";
+
 // import { Web3Button } from "@thirdweb-dev/react/dist/thirdweb-dev-react.cjs";
 // import Web3Button from "./web3button";
 
@@ -28,9 +28,11 @@ export default function App() {
     }
   }, [isConnected, address]);
 
+  const account = useAddress();
+  const contract = "0x8e1f81cFC04DDFd842Db7469f873b0ee5ef6fF8D"
   return (
     <main className="main">
-    <div className="container">
+    <div className="container2">
       <BrowserRouter>
         {isWalletConnected ? (
           <div>
@@ -38,13 +40,17 @@ export default function App() {
             <Routes>
               {/* <Route path="/" element={<Connect />} /> */}
               <Route path="/" element={<Home />} />
-              <Route path="/About" element={<About  contractAddress={0x27eE91d6aA1E1EAa7F5bfe86069d4f97a3d7D752}/>} />
+              <Route path="/About" element={<About />} />
               <Route path="/getdocument" element={<Vault />} />
-              <Route path="/feeds" element={<Document />} />
+
+              <Route path="/feeds" element={<MyDocument contract={contract
+              } account={account} />} />
+
+              {/* <Route path="/feeds" element={<MyDocument />} /> */}
+
               <Route path="/help" element={<Transactions />} />
-              <Route path="/ipfs" element={<IPFSComponent />} />
-              <Route path="/web3" element={<Web3Component />} />
-              {/* <Route path="/A" element={<Web3Button />} /> */}
+              <Route path = "/admin" element={<AdminPanel account={account}/>} />
+  
             </Routes>
           </div>
         ) : null} {/* Render nothing when wallet is connected */}

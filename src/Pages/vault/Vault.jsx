@@ -10,11 +10,11 @@ const apiSecretKey =
 
 function Vault() {
   const { contract } = useContract(
-    "0x97486276Db11aD47d81298828A7DE0eA78F32D6A"
+    "0x8e1f81cFC04DDFd842Db7469f873b0ee5ef6fF8D"
   );
-  const { mutateAsync: uploadFile, isLoading } = useContractWrite(
+  const { mutateAsync: uploadDocument, isLoading } = useContractWrite(
     contract,
-    "uploadFile"
+    "uploadDocument"
   );
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -59,7 +59,7 @@ function Vault() {
        ]);
    
        // Call the uploadFile function here with the ipfsCid as an argument
-       await uploadFile(ipfsCid, true);
+       await uploadDocument(ipfsCid);
    
        form.reset();
     } catch (error) {
@@ -75,7 +75,7 @@ function Vault() {
     const ipfsCid = lastUploadedFile.cid;
    
     try {
-       await uploadFile({ args: [ipfsCid, true] });
+       await uploadDocument({ args: [ipfsCid] });
     } catch (error) {
        console.error("Error uploading to blockchain:", error);
     }
@@ -107,7 +107,7 @@ function Vault() {
             </button>
             <Web3Button 
             className="buttonn"
-             contractAddress="0x97486276Db11aD47d81298828A7DE0eA78F32D6A"
+             contractAddress="0x8e1f81cFC04DDFd842Db7469f873b0ee5ef6fF8D"
              contractAbi={abi}
              action={ onSubmitHandlerBlockchain}
              >
