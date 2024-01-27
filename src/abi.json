@@ -1,0 +1,62 @@
+[
+  {
+    "type": "function",
+    "name": "fileId",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "files",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "string",
+        "name": "ipfsHash",
+        "internalType": "string"
+      },
+      {
+        "type": "address",
+        "name": "owner",
+        "internalType": "address"
+      },
+      {
+        "type": "bool",
+        "name": "isPublic",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "uploadFile",
+    "inputs": [
+      {
+        "type": "string",
+        "name": "_ipfsHash",
+        "internalType": "string"
+      },
+      {
+        "type": "bool",
+        "name": "_isPublic",
+        "internalType": "bool"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  }
+]

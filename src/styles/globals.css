@@ -8,15 +8,15 @@ body {
 }
 
 a {
-  color: #84309C;
-  text-decoration: none;
+  /* color: #84309C;
+  text-decoration: none; */
 }
 
 * {
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
 }
 
 body {
-  color: #e7e8e8;
-  background: #070707;
+  /* color: #e7e8e8;
+  background: #070707; */
 }

@@ -1,4 +1,4 @@
-.main {
+/* .main {
   width: 100vw;
   min-height: 100vh;
   height: auto;
@@ -10,9 +10,9 @@
   max-width: 1440px;
   padding: 0 1rem;
   margin: 0 auto;
-}
+} */
 
-.gradient-text-0 {
+/* .gradient-text-0 {
   background: -webkit-linear-gradient(#bfa3da, #84309c, #c735b0);
   -webkit-background-clip: text;
   background-clip: text;
@@ -92,9 +92,9 @@
   max-width: 440px;
   overflow: none;
   border: none;
-}
+} */
 
-.card-text {
+/* .card-text {
   padding: 1rem;
 }
 
@@ -149,4 +149,4 @@
 }
 .logo img {
   filter: invert(1);
-}
+} */

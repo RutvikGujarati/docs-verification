@@ -1,0 +1,435 @@
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,500,300,700);
+
+* {
+  font-family: Open Sans;
+}
+
+.body{
+    margin: 0px;
+    background-color: #ADD8E6;
+}
+
+p{
+    font-family: borso;
+}
+
+
+.header{
+    margin-top: 0px;
+    position: fixed;
+    align-items: center;
+    display: flex;
+    z-index: 1;
+    gap: 953px;
+    padding: 5px 30px;  
+    /* background-color: rgba(136, 222, 224, 0.808); */
+    backdrop-filter: blur(20px);
+    background-color: #add8e6d3;
+}
+
+.header .homelogo img{
+    width: 230px;
+    height: 46px;
+}
+
+
+.body .header .homelogo{
+    animation: my-gif-animation 1s infinite;
+    margin-left: 50px;    
+}
+
+.homebutton{
+    padding-right: 50px;
+}
+
+.homebutton button{
+    background-image: linear-gradient(to right, #000428 0%, #004e92  51%, #000428  100%) !important;
+    margin: 10px !important;
+    padding: 15px 15px !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    transition: 0.5s !important;
+    background-size: 200% auto !important;
+    color: white !important;            
+    box-shadow: 0 0 20px #eee !important;
+    border-radius: 10px !important;
+    display: block!important;
+  
+}
+
+.homebutton button:hover{
+    background-position: right center !important;
+}
+
+.homebuttonbottom button{
+    font-size: larger;
+    font-weight: 600;
+    font-style: inherit;
+    border-radius: 10px;
+    border: 2px solid #FFFFFF;
+    color: black;
+    width: 160px;
+    padding: 10px 0px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.homebuttonbottom button:hover{
+    border: 2px solid #A5BEEE;
+    color: #120B4D;
+    background-color: #A5BEEE;
+}
+
+/* .poster .image{
+    position: absolute;
+    margin-top: 80px;
+    display: flex; 
+    overflow-x: scroll;
+    overflow-y: hidden;
+} */
+
+.poster .image{
+    padding-top: 80px;
+    width: 1517px;
+    height: 556px;
+    overflow: hidden;
+
+}
+
+/* .poster .image img{
+    width: 1535px;
+    height:556px;
+
+
+} */
+
+.poster .image img{
+    width: 100%;
+    height: 100%;
+    display: none; 
+}
+
+.poster .image img:first-of-type {
+    display: block;
+}  
+
+.concept{
+    position: relative;
+    margin-top: 20px;
+    height: 400px;
+    /* background-color: rgb(9, 5, 78); */
+}
+
+.concept .conceptflex{
+    display: flex;
+    gap: 80px;
+    align-content: center;
+    width: 80%;
+    margin: auto;
+
+}
+
+.concept .conceptflex  .concepttext{
+    position: absolute;
+    text-align: center;
+
+    width: 500px;
+    font-weight: 350;
+    top: 45px;
+    font-size: larger;
+
+}
+
+.concept .conceptflex  .concepttext h1{
+    color: #0c1022;
+}
+
+.concept .conceptflex  .concepttext p{
+    line-height: 35px;
+    color: #808080;
+}
+
+.concept .conceptimg{
+    position: absolute;
+    top: 50px;
+    bottom: 50px;
+    right: 80px;
+    display: flex;
+    gap: 150px;
+    border-radius: 30px;
+    align-items: center;
+    background-color: #4158D0;
+    background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+    box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+}
+
+.concept .conceptimg .conceptuser{
+    display: block;
+    text-align: center;
+    width: 250px;
+    color: #ffffff;
+}
+
+.concept .conceptimg .conceptuser img{
+    width: 64px;
+}
+
+.bannerleft{
+    display: flex;
+    gap: 70px;
+    padding-top: 80px;
+    text-align: center;
+    align-items: center;
+}
+
+.bannerleft .bannerimg img{ 
+    border-radius: 30px;
+    margin-left: 50px;
+    margin-top: 60px;
+    width: 750px;
+    box-shadow: rgb(10, 10, 81) 0px 22px 70px 4px;
+}
+
+.bannerleft .bannertext{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 550px;
+    line-height: 35px;
+    color: #808080;
+    font-size: larger;
+    font-weight: 350;
+}
+
+.bannerleft .bannertext h1{
+    color: #0c1022;
+    width: 600px;
+}
+
+.bannerright{
+    display: flex;
+    gap: 70px;
+    padding-top: 80px;
+    text-align: center;
+    align-items: center;
+}
+
+.bannerright .bannerimg img{ 
+    border-radius: 30px;
+    margin-top: 30px;
+    width: 750px;
+    box-shadow: rgb(10, 10, 81) 0px 22px 70px 4px;
+}
+
+
+.bannerright .bannertext{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 550px;
+    font-size: larger;
+    line-height: 35px;
+    margin-left: 50px;
+    color: #808080;
+    font-weight: 350;
+}
+
+.bannerright .bannertext h1{
+    color: #0c1022;
+    width: 600px;
+    line-height: 50px;
+}
+
+.roadmap img{
+    width: 100%;
+}
+
+.footer {
+    text-align: center;
+    padding: 50px 0px;
+}
+
+.footer h1{
+    color: #ffffff;
+    margin-bottom: 50px;
+}
+
+
+.footer-distributed{
+    background: #666;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
+    box-sizing: border-box;
+    width: 100%;
+    text-align: left;
+    font: bold 16px sans-serif;
+    padding: 55px 50px;
+  }
+  
+  .footer-distributed .footer-left,
+  .footer-distributed .footer-center,
+  .footer-distributed .footer-right{
+    display: inline-block;
+    vertical-align: top;
+  }
+  
+  /* Footer left */
+  
+  .footer-distributed .footer-left{
+    width: 40%;
+  }
+  
+  /* The company logo */
+  
+  .footer-distributed h3{
+    color:  #ffffff;
+    font: normal 36px 'Open Sans', cursive;
+    margin: 0;
+  }
+  
+  .footer-distributed h3 span{
+    color:  lightseagreen;
+  }
+  
+  /* Footer links */
+  
+  .footer-distributed .footer-links{
+    color:  #ffffff;
+    margin: 20px 0 12px;
+    padding: 0;
+  }
+  
+  .footer-distributed .footer-links a{
+    display:inline-block;
+    line-height: 1.8;
+    font-weight:400;
+    text-decoration: none;
+    color:  inherit;
+  }
+  
+  .footer-distributed .footer-company-name{
+    color:  #222;
+    font-size: 14px;
+    font-weight: normal;
+    margin: 0;
+  }
+  
+  /* Footer Center */
+  
+  .footer-distributed .footer-center{
+    width: 35%;
+  }
+  
+  .footer-distributed .footer-center i{
+    background-color:  #33383b;
+    color: #ffffff;
+    font-size: 25px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 42px;
+    margin: 10px 15px;
+    vertical-align: middle;
+  }
+  
+  .footer-distributed .footer-center i.fa-envelope{
+    font-size: 17px;
+    line-height: 38px;
+  }
+  
+  .footer-distributed .footer-center p{
+    display: inline-block;
+    color: #ffffff;
+    font-weight:400;
+    vertical-align: middle;
+    margin:0;
+  }
+  
+  .footer-distributed .footer-center p span{
+    display:block;
+    font-weight: normal;
+    font-size:14px;
+    line-height:2;
+  }
+  
+  .footer-distributed .footer-center p a{
+    color:  lightseagreen;
+    text-decoration: none;;
+  }
+  
+  .footer-distributed .footer-links a:before {
+    content: "|";
+    font-weight:300;
+    font-size: 20px;
+    left: 0;
+    color: #fff;
+    display: inline-block;
+    padding-right: 5px;
+  }
+  
+  .footer-distributed .footer-links .link-1:before {
+    content: none;
+  }
+  
+  /* Footer Right */
+  
+  .footer-distributed .footer-right{
+    width: 20%;
+  }
+  
+  .footer-distributed .footer-company-about{
+    line-height: 20px;
+    color:  #92999f;
+    font-size: 13px;
+    font-weight: normal;
+    margin: 0;
+  }
+  
+  .footer-distributed .footer-company-about span{
+    display: block;
+    color:  #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .footer-distributed .footer-icons{
+    margin-top: 25px;
+  }
+  
+  .footer-distributed .footer-icons a{
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    background-color:  #33383b;
+    border-radius: 2px;
+  
+    font-size: 20px;
+    color: #ffffff;
+    text-align: center;
+    line-height: 35px;
+  
+    margin-right: 3px;
+    margin-bottom: 5px;
+  }
+  
+  /* If you don't want the footer to be responsive, remove these media queries */
+  
+  @media (max-width: 880px) {
+  
+    .footer-distributed{
+      font: bold 14px sans-serif;
+    }
+  
+    .footer-distributed .footer-left,
+    .footer-distributed .footer-center,
+    .footer-distributed .footer-right{
+      display: block;
+      width: 100%;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+  
+    .footer-distributed .footer-center i{
+      margin-left: 0;
+    }
+  
+  }
