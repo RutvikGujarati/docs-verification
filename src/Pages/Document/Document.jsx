@@ -16,7 +16,6 @@ import Web3 from "web3";
 
 const MyDocument = ({ account }) => {
   const [myDocuments, setMyDocuments] = useState([]);
-  const [documentHash, setDocumentHash] = useState();
   const [web3, setWeb3] = useState(null);
   const [contract, setContract] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -49,31 +48,28 @@ const MyDocument = ({ account }) => {
 
   const fetchMyDocuments = async () => {
     try {
-        setLoading(true);
-        if (contract && account) {
-            const myDocumentsResponse = await contract.methods.getMyDocuments().call({ from: account });
-            console.log("My Documents Response:", myDocumentsResponse);
+      setLoading(true);
+      if (contract && account) {
+        const myDocumentsResponse = await contract.methods
+          .getMyDocuments()
+          .call({ from: account });
+        console.log("My Documents Response:", myDocumentsResponse);
 
-            // Check if myDocumentsResponse is an array
-            if (Array.isArray(myDocumentsResponse)) {
-                setMyDocuments(myDocumentsResponse);
-            } else {
-                console.error("Invalid response format for myDocuments");
-            }
-        } else {
-            console.error("Contract or account not available");
-        }
+        // Check if myDocumentsResponse is an array
+        // if (Array.isArray(myDocumentsResponse)) {
+        setMyDocuments(myDocumentsResponse);
+        // console.log('array res')
+        // } else {
+        //   console.error("Invalid response format for myDocuments");
+        // }
+      } else {
+        console.error("Contract or account not available");
+      }
     } catch (error) {
-        setError("Error getting my documents: " + error.message);
+      setError("Error getting my documents: " + error.message);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
- const filterUserHashes = () => {
-    // Filter the myDocuments array to include only the hashes related to the current user
-    const userHashes = myDocuments.filter(document => document.userAddress === account)
-                                  .map(document => document.documentHash);
-    setDocumentHash(userHashes);
   };
 
   return (
@@ -91,29 +87,27 @@ const MyDocument = ({ account }) => {
             </Web3Button>
           </div>
           <ListGroup className="mt-4">
-            {error && <div style={{ color: "red" }}>{error}</div>}
-            <div>
-              <h3>My Documents:</h3>
-            </div>
-            {loading ? (
-              <div>Loading...</div>
-            ) : myDocuments.length > 0 ? (
-              <ul>
-                {myDocuments.map((hash, index) => (
-                  <li>
-                    <div>
-                      <strong>Account :</strong> {index}
-                    </div>
-                    <div>
-                      <strong>Document Hash:</strong> {hash}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div>No documents found.</div>
-            )}
-          </ListGroup>
+  {error && <div style={{ color: "red" }}>{error}</div>}
+  <div>
+    <h3>My Documents:</h3>
+  </div>
+  {loading ? (
+    <div>Loading...</div>
+  ) : myDocuments.length > 0 ? (
+    <ul>
+      {myDocuments.map((hash, index) => (
+        <li key={index}>
+          <div>
+            <strong>Document Hash:</strong> {hash}
+          </div>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <div>No documents found.</div>
+  )}
+</ListGroup>
+
         </Col>
       </Row>
     </Container>

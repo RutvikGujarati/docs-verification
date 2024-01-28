@@ -48,8 +48,8 @@ export default function App() {
 
               {/* <Route path="/feeds" element={<MyDocument />} /> */}
 
-              <Route path="/help" element={<Transactions />} />
-              <Route path = "/admin" element={<AdminPanel account={account}/>} />
+              <Route path="/Verified" element={<Transactions />} />
+              <Route path = "/Admin" element={<AdminPanel account={account}/>} />
   
             </Routes>
           </div>

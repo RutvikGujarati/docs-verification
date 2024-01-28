@@ -59,7 +59,7 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="Help">
-            <Link to="/help">
+            <Link to="/Verified">
               <i>
                 <FontAwesomeIcon icon={faLightbulb} />
               </i>
@@ -67,6 +67,14 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="About">
+            <Link to="/Admin">
+              <i>
+                <FontAwesomeIcon icon={faCircleInfo} />
+              </i>
+              Admin
+            </Link>
+          </div>
+          <div className="Help">
             <Link to="/About">
               <i>
                 <FontAwesomeIcon icon={faCircleInfo} />
