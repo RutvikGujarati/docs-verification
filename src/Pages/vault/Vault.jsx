@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Web3Button, useContract, useContractWrite } from "@thirdweb-dev/react";
 import axios from "axios";
 import "./Vault.css";
@@ -10,7 +10,7 @@ const apiSecretKey =
 
 function Vault() {
   const { contract } = useContract(
-    "0x8e1f81cFC04DDFd842Db7469f873b0ee5ef6fF8D"
+    "0x64239BDC9F285CE26848F80b9BB976e99E428Cbe"
   );
   const { mutateAsync: uploadDocument, isLoading } = useContractWrite(
     contract,
@@ -24,72 +24,86 @@ function Vault() {
     event.preventDefault();
     const form = event.target;
     const files = form[0].files;
-   
+
     if (!files || files.length === 0) {
-       return alert("No files selected");
+      return alert("No files selected");
     }
-   
+
     const file = files[0];
-   
+
     const formData = new FormData();
     formData.append("file", file);
-   
+
     try {
-       const response = await axios.post(
-         "https://api.pinata.cloud/pinning/pinFileToIPFS",
-         formData,
-         {
-           headers: {
-             pinata_api_key: apiKey,
-             pinata_secret_api_key: apiSecretKey,
-             "Content-Type": "multipart/form-data",
-           },
-         }
-       );
-   
-       const ipfsCid = response.data.IpfsHash;
-       const fileName = file.name;
-   
-       setUploadedFiles((prevFiles) => [
-         ...prevFiles,
-         {
-           cid: ipfsCid,
-           name: fileName,
-         },
-       ]);
-   
-       // Call the uploadFile function here with the ipfsCid as an argument
-       await uploadDocument(ipfsCid);
-   
-       form.reset();
+      const response = await axios.post(
+        "https://api.pinata.cloud/pinning/pinFileToIPFS",
+        formData,
+        {
+          headers: {
+            pinata_api_key: apiKey,
+            pinata_secret_api_key: apiSecretKey,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const ipfsCid = response.data.IpfsHash;
+      const fileName = file.name;
+
+      setUploadedFiles((prevFiles) => [
+        ...prevFiles,
+        {
+          cid: ipfsCid,
+          name: fileName,
+        },
+      ]);
+
+      // Call the uploadFile function here with the ipfsCid as an argument
+      await uploadDocument(ipfsCid);
+
+      form.reset();
     } catch (error) {
-       console.error("Error uploading to IPFS:", error);
+      console.error("Error uploading to IPFS:", error);
     }
-   };
-   const onSubmitHandlerBlockchain = async () => {
+  };
+  const onSubmitHandlerBlockchain = async () => {
     if (!uploadedFiles.length) {
-       return alert("No files uploaded to IPFS");
+      return alert("No files uploaded to IPFS");
     }
-   
+
     const lastUploadedFile = uploadedFiles[uploadedFiles.length - 1];
     const ipfsCid = lastUploadedFile.cid;
-   
+
     try {
-       await uploadDocument({ args: [ipfsCid] });
+      await uploadDocument({ args: [ipfsCid] });
     } catch (error) {
-       console.error("Error uploading to blockchain:", error);
+      console.error("Error uploading to blockchain:", error);
     }
-   };
+  };
   const handleDelete = (index) => {
     const updatedFiles = [...uploadedFiles];
     updatedFiles.splice(index, 1);
     setUploadedFiles(updatedFiles);
   };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+  };
+  
+  // ...
+  
+ 
+  
+  useEffect(() => {
+    console.log("selectedFile changed:", selectedFile);
+  }, [selectedFile]);
+  
+
   return (
-    <div className="app">
+    <div className="app2">
       <div className="app__container">
-        <div className="container">
+        <div className="containerupl">
           <h1>IPFS Uploader</h1>
           <form onSubmit={onSubmitHandler}>
             <label htmlFor="file-upload" className="custom-file-upload">
@@ -99,18 +113,20 @@ function Vault() {
               id="file-upload"
               type="file"
               name="file"
+              onChange={handleFileChange}
               disabled={isLoading}
             />
             {selectedFile && <p>Selected File: {selectedFile.name}</p>}
+            
             <button className="buttonn" type="submit" disabled={isLoading}>
-              {isLoading ? 'Uploading...' : 'Upload to IPFS⬇️'}
+              {isLoading ? "Uploading..." : "Upload to IPFS⬇️"}
             </button>
-            <Web3Button 
-            className="buttonn"
-             contractAddress="0x8e1f81cFC04DDFd842Db7469f873b0ee5ef6fF8D"
-             contractAbi={abi}
-             action={ onSubmitHandlerBlockchain}
-             >
+            <Web3Button
+              className="buttonn"
+              contractAddress="0x64239BDC9F285CE26848F80b9BB976e99E428Cbe"
+              contractAbi={abi}
+              action={onSubmitHandlerBlockchain}
+            >
               {isLoading ? "Uploading..." : "Upload To Blockchain"}
             </Web3Button>
           </form>
@@ -118,23 +134,28 @@ function Vault() {
         <div className="data">
           {uploadedFiles.map((file, index) => (
             <div key={file.cid + index}>
-              {/* <img
-                className="image"
-                alt={`Uploaded #${index + 1}`}
-                src={`https://ipfs.io/ipfs/${file.cid}`}
-                style={{ maxWidth: "400px", margin: "15px" }}
-              /> */}
-              <div className="ipfs-link-box">
+              {
+                <img
+                  className="image"
+                  alt={`Uploaded #${index + 1}`}
+                  src={`https://ipfs.io/ipfs/${file.cid}`}
+                  style={{ maxWidth: "400px", margin: "15px" }}
+                />
+              }
+              <div className="ipfslink-box">
                 <h4>File Name: {file.name}</h4>
                 <h4>Link to IPFS:</h4>
-                <a
-                  href={`https://ipfs.io/ipfs/${file.cid}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <h3>{`https://ipfs.io/ipfs/${file.cid}`}</h3>
-                </a>
-                <button onClick={() => handleDelete(index)}>Delete</button>
+                <div className="link-container">
+                  <a
+                  className="text1"
+                    href={`https://ipfs.io/ipfs/${file.cid}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <h3>{`https://ipfs.io/ipfs/${file.cid}`}</h3>
+                  </a>
+                </div>
+                <button className="bt3" onClick={() => handleDelete(index)}>Delete</button>
               </div>
             </div>
           ))}

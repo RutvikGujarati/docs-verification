@@ -6,6 +6,7 @@
   padding: 10px 0;
 }
 
+
 .header1 {
   display: flex;
   justify-content: space-between;
@@ -17,6 +18,7 @@
 
 .logo {
   flex: 1;
+  margin-left: -100px;
 }
 
 .logo a {
@@ -40,7 +42,7 @@
   color: black;
   display: flex;
   align-items: center;
-  padding: 5px 10px;
+  padding: 5px 6px;
   border-radius: 5px;
   transition: background-color 0.3s ease-in-out;
 }

@@ -1,23 +1,25 @@
-// ... (existing imports and code)
+// AdminPanel.js
 
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  Container,
-  Row,
-  Col,
-  ListGroup,
-  Button,
-} from "react-bootstrap";
-import { Account, Web3Button, useContract } from "@thirdweb-dev/react";
-import abi from './Document/abi.json';  // Uncomment this line
+import { Container, Row, Col, Button, Table, Form } from "react-bootstrap";
+import {useContract , useContractRead} from "@thirdweb-dev/react";
 import Web3 from "web3";
+import abi from "./Document/abi.json";
+import "./AdminPanel.css";
 
 const AdminPanel = ({ account }) => {
   const [dummyHash, setDummyHash] = useState("");
   const [contract, setContract] = useState(null);
+  const [address, setAddress] = useState("");
+  const [users, setUsers] = useState([]);
+  const [userDocuments, setUserDocuments] = useState([]);
+  const [userAddress, setUserAddress] = useState("");
+  const [documents, setDocuments] = useState([]);
+  const [addresses, setAddresses] = useState("");
   const [ipfsHash, setIpfsHash] = useState("");
   const [web3, setWeb3] = useState(null);
+  const [verify, setVerify] = useState("");
   const [verifiedDocumentHash, setVerifiedDocumentHash] = useState("");
   const [newAdminAddress, setNewAdminAddress] = useState("");
 
@@ -29,7 +31,7 @@ const AdminPanel = ({ account }) => {
           await window.ethereum.enable();
           setWeb3(web3Instance);
 
-          const contractAddress = "0x8e1f81cFC04DDFd842Db7469f873b0ee5ef6fF8D";
+          const contractAddress = "0x64239BDC9F285CE26848F80b9BB976e99E428Cbe";
           const contractInstance = new web3Instance.eth.Contract(
             abi,
             contractAddress
@@ -46,6 +48,37 @@ const AdminPanel = ({ account }) => {
     init();
   }, []);
 
+  const { contract1 } = useContract("0x64239BDC9F285CE26848F80b9BB976e99E428Cbe");
+  const { data: Document } = useContractRead(
+    contract1,
+    "Document",
+    [users]
+  );
+  const getAllDocuments = async () => {
+    try {
+      // Check if contract is not null
+      if (!contract) {
+        console.error("Contract not initialized");
+        return;
+      }
+
+      // Fetch the user's documents from the smart contract
+      const rawDocuments = await contract.methods
+        .getUserDocumentss(address)
+        .call({ from: account });
+
+      // Parse the raw documents into an array of objects
+
+      setUserDocuments(rawDocuments);
+    } catch (error) {
+      console.error("Error getting user documents:", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllDocuments("");
+  }, []);
+
   const addDummyIPFSHash = async () => {
     try {
       // Check if contract is initialized
@@ -55,22 +88,43 @@ const AdminPanel = ({ account }) => {
       }
 
       // Call the addDummyIPFSHash function from the smart contract
-      await contract.methods.addDummyIPFSHash(dummyHash).send({ from: account });
+      await contract.methods
+        .addDummyIPFSHash(dummyHash)
+        .send({ from: account });
       alert("Dummy IPFS Hash added successfully");
     } catch (error) {
       console.error("Error adding dummy IPFS hash:", error);
     }
   };
 
+  const compareWithHardcodedHashes = async () => {
+    try {
+      // Ensure ipfsHash is a string
+      if (typeof ipfsHash !== "string") {
+        throw new Error("ipfsHash must be a string");
+      }
+
+      // Call the compareWithHardcodedHashes function from the smart contract
+      const result = await contract.methods
+        .compareWithHardcodedHashes(ipfsHash)
+        .call({ from: account });
+
+      alert(`Comparison result: ${result}`);
+    } catch (error) {
+      console.error("Error comparing with hardcoded hashes:", error);
+    }
+  };
+
   const verifyDocument = async () => {
     try {
-      // Call the verifyDocument function from the smart contract
       await contract.methods
-        .verifyDocument(verifiedDocumentHash)
+        .verifyDocument(verify, addresses)
         .send({ from: account });
-      alert("Document verified successfully");
+      alert(`Document ${us} verified successfully!`);
+      // Refresh the document list after verification
+      getAllDocuments();
     } catch (error) {
-      console.error("Error verifying document:", error);
+      console.error("Error verifying document:", error.message);
     }
   };
 
@@ -86,22 +140,24 @@ const AdminPanel = ({ account }) => {
     }
   };
 
-  const compareWithHardcodedHashes = async () => {
+  const GetAllUsers = async () => {
     try {
-      // Call the compareWithHardcodedHashes function from the smart contract
-      const result = await contract.methods
-        .compareWithHardcodedHashes(ipfsHash)
-        .call({ from: account });
-      alert("Comparison result:", result);
+       const res = await contract.methods
+        .GetAllUsers()
+        .call({ from: account })
+        setUsers(res);
     } catch (error) {
-      console.error("Error comparing with hardcoded hashes:", error);
+      console.log("error fetching in user details:", error);
     }
   };
-
+useEffect(()=>{
+  GetAllUsers();
+},[]);
   return (
     <Container className="mt-5">
       <Row>
         <Col>
+        <p className="text">If you try to send transaction without admin authority your all transaction will fail!!</p>
           <h1 className="text-center mb-4">Admin Panel</h1>
           <div className="form-group">
             <label>Dummy IPFS Hash:</label>
@@ -119,46 +175,93 @@ const AdminPanel = ({ account }) => {
               Add Dummy IPFS Hash
             </Button>
           </div>
-          {/* Add other admin functionalities as needed */}
-        </Col>
-        <Col>
           <div className="form-group">
-            <label>Verified Document Hash:</label>
+            <label>compareWithHardcodedHashes IPFS Hash:</label>
             <input
-              type="text"
-              className="form-control"
-              value={verifiedDocumentHash}
-              onChange={(e) => setVerifiedDocumentHash(e.target.value)}
-            />
-            <Button variant="success" onClick={verifyDocument} className="mt-2">
-              Verify Document
-            </Button>
-          </div>
-          <div className="form-group">
-            <label>New Admin Address:</label>
-            <input
-              type="text"
-              className="form-control"
-              value={newAdminAddress}
-              onChange={(e) => setNewAdminAddress(e.target.value)}
-            />
-            <Button variant="warning" onClick={changeAdmin} className="mt-2">
-              Change Admin
-            </Button>
-          </div>
-          <div className="mt-3">
-          <input
               type="text"
               className="form-control"
               value={ipfsHash}
               onChange={(e) => setIpfsHash(e.target.value)}
             />
-            <Button variant="info" onClick={compareWithHardcodedHashes}>
-              Compare With Hardcoded Hashes
+            <Button
+              variant="primary"
+              onClick={compareWithHardcodedHashes}
+              className="mt-2"
+            >
+              compare IPFS Hash
             </Button>
           </div>
+          {/* Display the user's documents */}
+          {userDocuments.map((documentHash, index) => (
+            <div key={index} className="document-item">
+              
+              <p>IPFS: https://ipfs.io/ipfs/{documentHash.documentHash}</p>
+              {/* <p>{documentHash}</p> */}
+              <input
+                type="text"
+                className="form-control"
+                placeholder="input ipfs"
+                value={verify}
+                onChange={(e) => setVerify(e.target.value)}
+              />
+               <p>User Address: {documentHash.userAddress}</p>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="input address"
+                value={addresses}
+                onChange={(e) => setAddresses(e.target.value)}
+              />
+              <Button
+                // id={`verify-button-${documentHash}`}
+                variant="success"
+                onClick={ verifyDocument}
+                className="verify-button"
+              >
+                Verify Document
+              </Button>
+            </div>
+          ))}
+          {/* Add other admin functionalities as needed */}
         </Col>
       </Row>
+      <br />
+      <Form>
+      <Button className="getbt" onClick={GetAllUsers}>getAllUsers</Button>
+        <div>
+          <h2>User List</h2>
+          <ul>
+            {users.map((user, index) => (
+              <li key={index}>{user}</li>
+            ))}
+          </ul>
+        </div>
+        <label>User Address: </label>
+        <input
+          type="text"
+          placeholder="Enter user address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+        <Button className="getbt" variant="primary" onClick={getAllDocuments}>
+          Get All Documents
+        </Button>
+        
+      </Form>
+      <Form>
+        <Form.Group controlId="formNewAdmin">
+          <Form.Label>New Admin Address</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter new admin address"
+            onChange={(e) => setNewAdminAddress(e.target.value)}
+          />
+        </Form.Group>
+        <Button className="getbt" variant="success" onClick={changeAdmin}>
+          Change Admin
+        </Button>
+      </Form>
+      <br />
     </Container>
   );
 };

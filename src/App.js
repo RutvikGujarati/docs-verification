@@ -29,7 +29,7 @@ export default function App() {
   }, [isConnected, address]);
 
   const account = useAddress();
-  const contract = "0x8e1f81cFC04DDFd842Db7469f873b0ee5ef6fF8D"
+  const contract = "0x64239BDC9F285CE26848F80b9BB976e99E428Cbe"
   return (
     <main className="main">
     <div className="container2">

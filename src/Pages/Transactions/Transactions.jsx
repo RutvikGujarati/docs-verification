@@ -1,24 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  Container,
-  Row,
-  Col,
-  ListGroup,
-  Button,
-  Spinner,
-  Alert,
-} from "react-bootstrap";
-import { Account, Web3Button, useContract } from "@thirdweb-dev/react";
-import abi from "../Document/abi.json";
+import { Container, Col, Row, Button } from "react-bootstrap";
 import Web3 from "web3";
+import abi from "../Document/abi.json";
 
 const Transactions = ({ account }) => {
-  const [verifiedDocuments, setVerifiedDocuments] = useState([]);
   const [web3, setWeb3] = useState(null);
   const [contract, setContract] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [userAddress, setUserAddress] = useState(""); // State for input field
+  const [verifiedDocuments, setVerifiedDocuments] = useState([]);
 
   useEffect(() => {
     const init = async () => {
@@ -27,8 +17,8 @@ const Transactions = ({ account }) => {
           const web3Instance = new Web3(window.ethereum);
           await window.ethereum.enable();
           setWeb3(web3Instance);
-
-          const contractAddress = "0x8e1f81cFC04DDFd842Db7469f873b0ee5ef6fF8D";
+    
+          const contractAddress = "0x64239BDC9F285CE26848F80b9BB976e99E428Cbe";
           const contractInstance = new web3Instance.eth.Contract(
             abi,
             contractAddress
@@ -41,40 +31,57 @@ const Transactions = ({ account }) => {
         console.error("Error initializing:", error);
       }
     };
+    
 
     init();
   }, []);
 
   const getVerifiedDocuments = async () => {
     try {
-      // Call the verifiedDocs function from the smart contract
-      const verifiedDocs = await contract.methods
-        .verifiedDocs()
+      // Check if contract is not null
+      if (!contract) {
+        console.error("Contract not initialized");
+        return;
+      }
+
+      // Fetch the user's documents from the smart contract
+      const rawDocuments = await contract.methods
+        .getVerifiedDocuments(userAddress)
         .call({ from: account });
-      setVerifiedDocuments(verifiedDocs);
-      console.log("Verified Documents:", verifiedDocs);
+
+      // Set the verified documents state
+      setVerifiedDocuments(rawDocuments);
     } catch (error) {
-      console.error("Error getting verified documents:", error);
+      console.error("Error getting user documents:", error);
     }
   };
+
   return (
     <div>
       <Container>
         <Col>
           <Row>
-          <div className="mt-4">
-            <Button variant="info" onClick={getVerifiedDocuments}>
+            <input
+              type="text"
+              placeholder="Enter user address"
+              value={userAddress}
+              onChange={(e) => setUserAddress(e.target.value)}
+            />
+            <button  variant="primary" onClick={getVerifiedDocuments}>
               Get Verified Documents
-            </Button>
-          </div>
-            <ListGroup className="mt-4">
-              <ListGroup.Item>
-                <strong>Verified Documents:</strong>
-              </ListGroup.Item>
-              {verifiedDocuments.map((hash, index) => (
-                <ListGroup.Item key={index}>{hash}</ListGroup.Item>
-              ))}
-            </ListGroup>
+            </button>
+            <div>
+              <h2>Verified Documents for User: {account}</h2>
+              {verifiedDocuments.length > 0 ? (
+                <ul>
+                  {verifiedDocuments.map((doc, index) => (
+                    <li key={index}>{doc}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No verified documents found for the user.</p>
+              )}
+            </div>
           </Row>
         </Col>
       </Container>

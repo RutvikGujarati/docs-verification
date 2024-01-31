@@ -49,6 +49,19 @@
 		"type": "event"
 	},
 	{
+		"inputs": [],
+		"name": "GetAllUsers",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "string",
@@ -64,12 +77,12 @@
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "_hashToAdd",
-				"type": "string"
+				"internalType": "address",
+				"name": "_userAddress",
+				"type": "address"
 			}
 		],
-		"name": "addHardcodedIPFSHash",
+		"name": "addUserAddress",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -108,7 +121,7 @@
 				"type": "string"
 			}
 		],
-		"name": "compareWithHardcodedHashe",
+		"name": "compareWithHardcodedHashes",
 		"outputs": [
 			{
 				"internalType": "bool",
@@ -122,17 +135,39 @@
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "_documentHash",
-				"type": "string"
+				"internalType": "address",
+				"name": "_userAddress",
+				"type": "address"
 			}
 		],
-		"name": "compareWithHardcodedHashes",
+		"name": "getAllDocumentsByAdmin",
 		"outputs": [
 			{
-				"internalType": "bool",
+				"components": [
+					{
+						"internalType": "address",
+						"name": "userAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "documentHash",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "isUploaded",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "isVerified",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct UserDocumentUpload.Document[]",
 				"name": "",
-				"type": "bool"
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -140,8 +175,71 @@
 	},
 	{
 		"inputs": [],
-		"name": "counter",
+		"name": "getAllUserByAdmin",
 		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "email",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "phone",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "age",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct UserDocumentUpload.Profile[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getMyAllDocuments",
+		"outputs": [
+			{
+				"internalType": "string[]",
+				"name": "",
+				"type": "string[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getProfile",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
 			{
 				"internalType": "uint256",
 				"name": "",
@@ -155,39 +253,11 @@
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "",
+				"name": "_userAddress",
 				"type": "address"
 			}
 		],
-		"name": "documents",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "userAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "documentHash",
-				"type": "string"
-			},
-			{
-				"internalType": "bool",
-				"name": "isUploaded",
-				"type": "bool"
-			},
-			{
-				"internalType": "bool",
-				"name": "isVerified",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getMyDocuments",
+		"name": "getUserDocumentss",
 		"outputs": [
 			{
 				"components": [
@@ -223,6 +293,25 @@
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "_userAddress",
+				"type": "address"
+			}
+		],
+		"name": "getVerifiedDocuments",
+		"outputs": [
+			{
+				"internalType": "string[]",
+				"name": "",
+				"type": "string[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
@@ -240,10 +329,98 @@
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "profiles",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "phone",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "age",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
-		"name": "shareDocs",
+		"name": "registerUser",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_email",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_phone",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_age",
+				"type": "uint256"
+			}
+		],
+		"name": "setProfile",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "submitAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "submittedAddresses",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -267,6 +444,25 @@
 				"type": "uint256"
 			}
 		],
+		"name": "userAddress",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
 		"name": "userAddresses",
 		"outputs": [
 			{
@@ -279,13 +475,39 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "verifiedDocs",
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "userDocuments",
 		"outputs": [
 			{
-				"internalType": "string[]",
-				"name": "",
-				"type": "string[]"
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "documentHash",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "isUploaded",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "isVerified",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -295,8 +517,13 @@
 		"inputs": [
 			{
 				"internalType": "string",
-				"name": "_documentHash",
+				"name": "_documentUrl",
 				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "_userAddress",
+				"type": "address"
 			}
 		],
 		"name": "verifyDocument",

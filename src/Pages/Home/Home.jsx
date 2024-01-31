@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Web3Button } from '@thirdweb-dev/react';
 import { useContractWrite, useContractRead, useContract, useAddress } from "@thirdweb-dev/react";
-import './Home.css';
+import './page.css';
 import registrationform from './photo.png';
 import UserRegistryABI from './profile.json'; // Replace with the actual ABI path
 
@@ -13,7 +13,7 @@ const Home = () => {
   const [phone, setPhone] = useState('');
   const [age, setAge] = useState('');
 
-  const { contract } = useContract("0xdda683Da70332BB37893A4c8AA59f9dF3cd9bf56");
+  const { contract } = useContract("0x64239BDC9F285CE26848F80b9BB976e99E428Cbe");
   const address = useAddress();
 
   const { mutateAsync, isLoading, error } = useContractWrite(
@@ -87,7 +87,7 @@ const Home = () => {
                   </div>
 
                   <Web3Button
-                    contractAddress='0xdda683Da70332BB37893A4c8AA59f9dF3cd9bf56'
+                    contractAddress='0x64239BDC9F285CE26848F80b9BB976e99E428Cbe'
                     contractAbi={UserRegistryABI}
                     action={registerUser}
                   >
@@ -100,7 +100,7 @@ const Home = () => {
                 {isEditing ? (
                   <div className='form-box'>
                     <div className='form'>
-                      <h2>Edit Profile</h2>
+                      <h2 className='text'>Edit Profile</h2>
                       <div className='input-box'>
                         <input type='text' onChange={(e) => setName(e.target.value)} value={name} required />
                         <label htmlFor=''>Username</label>
@@ -134,7 +134,7 @@ const Home = () => {
                     <p>Phone: {profiles?.phone}</p>
                     <p>Age: {profiles?.age.toString()}</p>
                     <button className='register-button' onClick={() => setIsEditing(true)}>
-                      Edit Profile
+                      Edit
                     </button>
                   </div>
                 )}
