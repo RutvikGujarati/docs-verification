@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col, Button, Table, Form } from "react-bootstrap";
-import {useContract , useContractRead} from "@thirdweb-dev/react";
+import { useContract, useContractRead } from "@thirdweb-dev/react";
 import Web3 from "web3";
 import abi from "./Document/abi.json";
 import "./AdminPanel.css";
@@ -48,12 +48,10 @@ const AdminPanel = ({ account }) => {
     init();
   }, []);
 
-  const { contract1 } = useContract("0x64239BDC9F285CE26848F80b9BB976e99E428Cbe");
-  const { data: Document } = useContractRead(
-    contract1,
-    "Document",
-    [users]
+  const { contract1 } = useContract(
+    "0x64239BDC9F285CE26848F80b9BB976e99E428Cbe"
   );
+  const { data: Document } = useContractRead(contract1, "Document", [users]);
   const getAllDocuments = async () => {
     try {
       // Check if contract is not null
@@ -115,18 +113,20 @@ const AdminPanel = ({ account }) => {
     }
   };
 
-  const verifyDocument = async () => {
+  const verifyDocument = async (documentHash, userAddress) => {
     try {
       await contract.methods
-        .verifyDocument(verify, addresses)
-        .send({ from: account });
-      alert(`Document ${us} verified successfully!`);
-      // Refresh the document list after verification
-      getAllDocuments();
+      .verifyDocument(documentHash, userAddress)
+      .send({ from: account, gas: 3000000 }); // Adjust the gas limit accordingly
+    
+      alert(`Document verified successfully!`);
+      getAllDocuments(userAddress);
     } catch (error) {
-      console.error("Error verifying document:", error.message);
+      console.error("Error verifying document:", error);
     }
   };
+
+  // Assuming getAllDocuments is a function to fetch and display documents
 
   const changeAdmin = async () => {
     try {
@@ -140,24 +140,29 @@ const AdminPanel = ({ account }) => {
     }
   };
 
+  // function isValidAddress(address) {
+  //   return /^0x[a-fA-F0-9]{40}$/.test(address);
+  // }
+
   const GetAllUsers = async () => {
     try {
-       const res = await contract.methods
-        .GetAllUsers()
-        .call({ from: account })
-        setUsers(res);
+      const res = await contract.methods.GetAllUsers().call({ from: account });
+      setUsers(res);
     } catch (error) {
       console.log("error fetching in user details:", error);
     }
   };
-useEffect(()=>{
-  GetAllUsers();
-},[]);
+  useEffect(() => {
+    GetAllUsers();
+  }, []);
   return (
     <Container className="mt-5">
       <Row>
         <Col>
-        <p className="text">If you try to send transaction without admin authority your all transaction will fail!!</p>
+          <p className="text">
+            If you try to send transaction without admin authority your all
+            transaction will fail!!
+          </p>
           <h1 className="text-center mb-4">Admin Panel</h1>
           <div className="form-group">
             <label>Dummy IPFS Hash:</label>
@@ -193,33 +198,19 @@ useEffect(()=>{
           </div>
           {/* Display the user's documents */}
           {userDocuments.map((documentHash, index) => (
-            <div key={index} className="document-item">
-              
+            <div key={index}>
+              <p>User Address: {documentHash.userAddress}</p>
               <p>IPFS: https://ipfs.io/ipfs/{documentHash.documentHash}</p>
-              {/* <p>{documentHash}</p> */}
-              <input
-                type="text"
-                className="form-control"
-                placeholder="input ipfs"
-                value={verify}
-                onChange={(e) => setVerify(e.target.value)}
-              />
-               <p>User Address: {documentHash.userAddress}</p>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="input address"
-                value={addresses}
-                onChange={(e) => setAddresses(e.target.value)}
-              />
-              <Button
-                // id={`verify-button-${documentHash}`}
-                variant="success"
-                onClick={ verifyDocument}
-                className="verify-button"
+              <button
+                onClick={() =>
+                  verifyDocument(
+                    documentHash.documentHash,
+                    documentHash.userAddress
+                  )
+                }
               >
                 Verify Document
-              </Button>
+              </button>
             </div>
           ))}
           {/* Add other admin functionalities as needed */}
@@ -227,7 +218,9 @@ useEffect(()=>{
       </Row>
       <br />
       <Form>
-      <Button className="getbt" onClick={GetAllUsers}>getAllUsers</Button>
+        <Button className="getbt" onClick={GetAllUsers}>
+          getAllUsers
+        </Button>
         <div>
           <h2>User List</h2>
           <ul>
@@ -246,7 +239,6 @@ useEffect(()=>{
         <Button className="getbt" variant="primary" onClick={getAllDocuments}>
           Get All Documents
         </Button>
-        
       </Form>
       <Form>
         <Form.Group controlId="formNewAdmin">
